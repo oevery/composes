@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  plex:
+    image: plexinc/pms-docker
+    container_name: plex
+    volumes:
+      - ./data:/media:rw # The media folder
+      # - /mnt/googledrive:/media/googledrive:rw
+      - ./config:/config # Configurations
+      - ./transcode:/transcode
+    environment:
+      - PLEX_CLAIM=claim-tocken # please change the tocken 
+    restart: unless-stopped
+    hostname: "MB-plex-server" # change the name to whatever you like
+    ports:
+      - "32400:32400" # The web port
+      # - "3005:3005" # The following ports are optional
+      # - "8324:8324"
+      # - "32469:32469"
+      # - "1900:1900"
+      # - "32410:32410"
+      # - "32412:32412"
+      # - "32413:32413"
+      # - "32414:32414"
