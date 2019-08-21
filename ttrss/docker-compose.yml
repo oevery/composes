@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  database.postgres:
+    image: sameersbn/postgresql:latest
+    container_name: postgres
+    environment:
+      - PG_PASSWORD=password # 务必修改密码
+      - DB_EXTENSION=pg_trgm
+    volumes:
+      - ./postgres/data/:/var/lib/postgresql/ # 将数据库数据保存到当前目录的 postgres/data/ 文件夹中
+    restart: always
+
+  service.rss:
+    image: wangqiru/ttrss:latest
+    container_name: ttrss
+    ports:
+      - 181:80
+    environment:
+      - SELF_URL_PATH=https://yourdomain/ # 更改为你自己的域名或者 IP
+      - DB_HOST=database.postgres # 数据库地址
+      - DB_PORT=5432 # 数据库端口
+      - DB_NAME=ttrss # 数据库名称
+      - DB_USER=postgres # 数据库用户名
+      - DB_PASS=password # 务必修改密码（应与上面修改的密码相同）
+      - ENABLE_PLUGINS=auth_internal,fever # 在系统层面启用的插件名称（为所有用户启用），auth_internal 为必选
+    stdin_open: true
+    tty: true
+    restart: always
+    command: sh -c 'sh /wait-for.sh database.postgres:5432 -- php /configure-db.php && exec s6-svscan /etc/s6/'
+
+  service.mercury: # set Mercury Parser API endpoint to `service.mercury:3000` on TTRSS plugin setting page
+    image: wangqiru/mercury-parser-api:latest
+    container_name: mercury
+    expose:
+      - 3000 # auth_internal is required. Plugins enabled here will be enabled for all users as system plugins
+    restart: always
+
+  service.opencc: # set OpenCC API endpoint to `service.opencc:3000` on TTRSS plugin setting page
+    image: wangqiru/opencc-api-server:latest
+    container_name: opencc
+    environment:
+      NODE_ENV: production
+    expose:
+      - 3000
+    restart: always
