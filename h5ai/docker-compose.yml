@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   h5ai:
@@ -6,9 +6,9 @@ services:
     container_name: h5ai
     restart: always
     volumes:
-      - "./config:/config"
+      - './config:/config'
       # - "/mnt/googledrive:/h5ai"
     ports:
-      - "185:80"
+      - '185:80'
     environment:
       - TZ=Asia/Shanghai # timezone

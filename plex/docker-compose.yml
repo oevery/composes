@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   plex:
@@ -10,11 +10,11 @@ services:
       - ./config:/config # Configurations
       - ./transcode:/transcode
     environment:
-      - PLEX_CLAIM=claim-tocken # please change the tocken 
+      - PLEX_CLAIM=claim-tocken # please change the tocken
     restart: unless-stopped
-    hostname: "MB-plex-server" # change the name to whatever you like
+    hostname: 'MB-plex-server' # change the name to whatever you like
     ports:
-      - "32400:32400" # The web port
+      - '32400:32400' # The web port
       # - "3005:3005" # The following ports are optional
       # - "8324:8324"
       # - "32469:32469"

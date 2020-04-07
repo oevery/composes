@@ -10,4 +10,4 @@ services:
       - ./.filebrowser.json:/.config.json
       - ./database.db:/database.db
     ports:
-      - "183:80"
+      - '183:80'
