@@ -4,10 +4,17 @@ services:
   filebrowser:
     image: filebrowser/filebrowser
     container_name: filebrowser
-    restart: unless-stopped
+    restart: always
     volumes:
-      - ./data:/srv
-      - ./.filebrowser.json:/.config.json
+      - ./data:/srv # 根目录
+      - ./.filebrowser.json:/.filebrowser.json
       - ./database.db:/database.db
+    environment:
+      - username=admin # 初始设置用户名
+      - password=admin # 初始设置密码
+      - port=80
+      - log=stdout
+      - database=/database.db
+      - root=/srv
     ports:
-      - '183:80'
+      - 181:80
