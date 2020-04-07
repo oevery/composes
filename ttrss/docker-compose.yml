@@ -15,6 +15,8 @@ services:
     image: wangqiru/ttrss:latest
     container_name: ttrss
     restart: always
+    ports:
+      - 183:80
     environment:
       - SELF_URL_PATH=https://yourdomain/ # 更改为你自己的域名或者 IP
       - DB_HOST=database.postgres # 数据库地址
@@ -23,8 +25,6 @@ services:
       - DB_USER=postgres # 数据库用户名
       - DB_PASS=password # 务必修改密码（应与上面修改的密码相同）
       - ENABLE_PLUGINS=auth_internal,fever # 在系统层面启用的插件名称（为所有用户启用），auth_internal 为必选
-    ports:
-      - 183:80
     stdin_open: true
     tty: true
     command: sh -c 'sh /wait-for.sh database.postgres:5432 -- php /configure-db.php && exec s6-svscan /etc/s6/'

@@ -5,6 +5,8 @@ services:
     image: awesometic/h5ai
     container_name: h5ai
     restart: always
+    ports:
+      - 182:80
     volumes:
       - ./config:/config
       # - /mnt/googledrive:/h5ai
@@ -12,5 +14,3 @@ services:
       - TZ=Asia/Shanghai # timezone
       # - HTPASSWD=true
       # - HTPASSWD_USER=admin
-    ports:
-      - 182:80

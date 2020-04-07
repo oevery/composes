@@ -5,6 +5,11 @@ services:
     image: bitwardenrs/server:latest
     container_name: bitwardenrs
     restart: always
+    ports:
+      - 184:80
+      # websocket 通知端口
+      # https://github.com/dani-garcia/bitwarden_rs/wiki/Enabling-WebSocket-notifications
+      # - 185:3012
     volumes:
       - ./data:/data
     environment:
@@ -15,8 +20,3 @@ services:
       - LOG_LEVEL=warn # log 级别：trace | debug | info | warn | error | off
       - EXTENDED_LOGGING=true
       # - WEBSOCKET_ENABLED=true
-    ports:
-      - 184:80
-      # websocket 通知端口
-      # https://github.com/dani-garcia/bitwarden_rs/wiki/Enabling-WebSocket-notifications
-      # - 185:3012
