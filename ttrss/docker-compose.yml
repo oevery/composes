@@ -29,14 +29,14 @@ services:
     tty: true
     command: sh -c 'sh /wait-for.sh database.postgres:5432 -- php /configure-db.php && exec s6-svscan /etc/s6/'
 
-  service.mercury: # set Mercury Parser API endpoint to `service.mercury:3000` on TTRSS plugin setting page
+  service.mercury: # 在插件页 API 地址填写 `service.mercury:3000` 启用插件
     image: wangqiru/mercury-parser-api:latest
     container_name: mercury
     restart: always
     expose:
-      - 3000 # auth_internal is required. Plugins enabled here will be enabled for all users as system plugins
+      - 3000
 
-  service.opencc: # set OpenCC API endpoint to `service.opencc:3000` on TTRSS plugin setting page
+  service.opencc: # 在插件页 API 地址填写 `service.opencc:3000` 启用插件
     image: wangqiru/opencc-api-server:latest
     container_name: opencc
     restart: always
