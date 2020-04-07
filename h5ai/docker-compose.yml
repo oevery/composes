@@ -6,9 +6,11 @@ services:
     container_name: h5ai
     restart: always
     volumes:
-      - './config:/config'
-      # - "/mnt/googledrive:/h5ai"
-    ports:
-      - '185:80'
+      - ./config:/config
+      # - /mnt/googledrive:/h5ai
     environment:
       - TZ=Asia/Shanghai # timezone
+      # - HTPASSWD=true
+      # - HTPASSWD_USER=admin
+    ports:
+      - 182:80
