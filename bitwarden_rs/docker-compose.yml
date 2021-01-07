@@ -1,0 +1,19 @@
+version: "3"
+services:
+  bitwarden:
+    image: bitwardenrs/server:latest
+    container_name: bitwarden
+    restart: always
+    ports:
+      - "3300:80"
+      - "3312:3012" # websocket 端口
+    environment:
+      - SIGNUPS_ALLOWED=true # 禁用注册
+      - ADMIN_TOKEN=ADMIN_TOKEN # 开启 /admin 管理界面，更改为你的 token，不需要可以注释
+      - DOMAIN=https://example.com/
+      - LOG_FILE=/data/bitwarden.log # 日志文件
+      - LOG_LEVEL=warn # 日志级别：trace | debug | info | warn | error | off
+      - EXTENDED_LOGGING=true
+      - WEBSOCKET_ENABLED=true # 启用 websocket
+    volumes:
+      - ./data:/data

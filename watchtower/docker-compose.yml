@@ -1,0 +1,14 @@
+version: "3"
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: always
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=86400 # 更新间隔
+      - WATCHTOWER_NOTIFICATIONS=shoutrrr # 通知方式
+      - WATCHTOWER_NOTIFICATION_URL=telegram://123456789:ABCDEFGHIJKLMNOPQRSTUVWXTZ@telegram?channels=123456789
+      - 'WATCHTOWER_NOTIFICATION_TEMPLATE=#watchtower{{println ""}}{{range .}}{{.Time.Format "2006-01-02 15:04:05"}} ({{.Level}}):{{println ""}}{{.Message}}{{println}}{{end}}'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

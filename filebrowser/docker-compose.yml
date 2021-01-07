@@ -6,7 +6,7 @@ services:
     container_name: filebrowser
     restart: always
     ports:
-      - 181:80
+      - 3400:80
     volumes:
       - ./data:/srv # 根目录
       - ./.filebrowser.json:/.filebrowser.json

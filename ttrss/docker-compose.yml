@@ -1,46 +1,60 @@
-version: '3'
-
+version: "3"
 services:
-  database.postgres:
-    image: postgres:alpine
-    container_name: postgres
-    restart: always
-    environment:
-      - PG_PASSWORD=password # 务必修改密码
-      - DB_EXTENSION=pg_trgm
-    volumes:
-      - ./postgres/data/:/var/lib/postgresql/ # 将数据库数据保存到当前目录的 postgres/data/ 文件夹中
-
   service.rss:
     image: wangqiru/ttrss:latest
     container_name: ttrss
-    restart: always
+    restart: unless-stopped
     ports:
-      - 183:80
+      - 3100:80
     environment:
-      - SELF_URL_PATH=https://yourdomain/ # 更改为你自己的域名或者 IP
-      - DB_HOST=database.postgres # 数据库地址
-      - DB_PORT=5432 # 数据库端口
-      - DB_NAME=ttrss # 数据库名称
-      - DB_USER=postgres # 数据库用户名
-      - DB_PASS=password # 务必修改密码（应与上面修改的密码相同）
-      - ENABLE_PLUGINS=auth_internal,fever # 在系统层面启用的插件名称（为所有用户启用），auth_internal 为必选
+      - SELF_URL_PATH=http://localhost:3100/ # 更改为你自己的域名或者 IP
+      - DB_PASS=ttrss_password # 务必修改密码（应与上面修改的密码相同）
+      # - PUID=1000
+      # - PGID=1000
+    volumes:
+      - feed-icons:/var/www/feed-icons/
+    networks:
+      - public_access
+      - service_only
+      - database_only
     stdin_open: true
     tty: true
-    command: sh -c 'sh /wait-for.sh database.postgres:5432 -- php /configure-db.php && exec s6-svscan /etc/s6/'
+
+  database.postgres:
+    image: postgres:13-alpine
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=ttrss_password # 务必修改密码
+    volumes:
+      - ./postgres/data/:/var/lib/postgresql/data # 将数据库数据保存到当前目录的 postgres/data/ 文件夹中
+    networks:
+      - database_only
 
   service.mercury: # 在插件页 API 地址填写 `service.mercury:3000` 启用插件
     image: wangqiru/mercury-parser-api:latest
     container_name: mercury
-    restart: always
-    expose:
-      - 3000
+    restart: unless-stopped
+    networks:
+      - public_access
+      - service_only
 
   service.opencc: # 在插件页 API 地址填写 `service.opencc:3000` 启用插件
     image: wangqiru/opencc-api-server:latest
     container_name: opencc
-    restart: always
+    restart: unless-stopped
     environment:
       - NODE_ENV=production
-    expose:
-      - 3000
+    networks:
+      - public_access
+      - service_only
+
+volumes:
+  feed-icons:
+
+networks:
+  public_access: # 提供对 ttrss UI 的访问
+  service_only: # 仅提供服务之间的通信
+    internal: true
+  database_only: # 仅提供服务和数据库之间的通信
+    internal: true

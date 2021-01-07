@@ -1,11 +1,11 @@
-version: '3'
-
+version: "3"
 services:
   rsshub:
     image: diygod/rsshub
-    restart: always
+    container_name: rsshub
+    restart: unless-stopped
     ports:
-      - 186:1200
+      - 3200:1200
     environment:
       - NODE_ENV=production
       - CACHE_TYPE=redis
@@ -17,11 +17,13 @@ services:
 
   browserless:
     image: browserless/chrome
-    restart: always
+    container_name: chrome
+    restart: unless-stopped
 
   redis:
     image: redis:alpine
-    restart: always
+    container_name: redis
+    restart: unless-stopped
     volumes:
       - redis-data:/data
 

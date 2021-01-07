@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  mtg:
+    image: nineseconds/mtg:stable
+    container_name: mtg
+    restart: always
+    ports:
+      - 8080:3128
+    #    networks:
+    #      - prometheus
+    command: run ee1234567890abcdefghijklmnopqrstuvwxyz
+
+#networks:
+#  prometheus:
+#  external: true
