@@ -5,12 +5,15 @@ services:
     container_name: nginx
     restart: always
     network_mode: host
-    environment:
-      - PUID=1000
-      - PGID=1000
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./conf:/etc/nginx/conf.d:ro
+      - ./deny.conf:/etc/nginx/deny.conf:ro
+      - ./conf.d:/etc/nginx/conf.d:ro
       - ./letsencrypt:/etc/letsencrypt:ro
       - ./html:/usr/share/nginx/html:ro
-      - ./log:/var/log/nginx
+      - /var/log/nginx:/var/log/nginx
+      - cache:/var/cache/nginx
+      - /etc/hosts:/etc/hosts:ro
+
+volumes:
+  cache:
