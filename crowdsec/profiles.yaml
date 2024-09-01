@@ -1,0 +1,11 @@
+name: default_ip_remediation
+#debug: true
+filters:
+  - Alert.Remediation == true && Alert.GetScope() == "Ip"
+decisions:
+  - type: ban
+    duration: 168h
+duration_expr: Sprintf('%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 24)
+notifications:
+  - telegram
+on_success: break

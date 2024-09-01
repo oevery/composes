@@ -15,11 +15,20 @@ services:
       GID: "${GID-1000}"
       # https://app.crowdsec.net/hub/collections 想订阅的合集
       COLLECTIONS: "crowdsecurity/linux crowdsecurity/nginx-proxy-manager"
-      ENROLL_KEY: aaaaaaaaaaaaaaaa # 修改为你的 key
+      ENROLL_KEY: aaaaaaaaa # key
       ENROLL_INSTANCE_NAME: crowdsec # 实例名称
     volumes:
-      - ./data:/var/lib/crowdsec/data/ # 数据存放目录
-      - ./config:/etc/crowdsec/ # 配置存放目录
-      - /var/log/auth.log:/logs/auth.log:ro
-      - /var/log/syslog.log:/logs/syslog.log:ro
+      - crowdsec-db:/var/lib/crowdsec/data/ # 数据存放目录
+      - crowdsec-config:/etc/crowdsec/ # 配置存放目录
+      - ./acquis.yaml:/etc/crowdsec/acquis.yaml
+      - ./custom-whitelists.yaml:/etc/crowdsec/parsers/s02-enrich/custom-whitelists.yaml # 自定义白名单
+      - ./notifications:/etc/crowdsec/notifications # 通知配置
+      - ./profiles.yaml:/etc/crowdsec/profiles.yaml # 自定义配置
+
+      - /var/log/auth.log:/logs/auth.log:ro # 登录日志
+      - /var/log/syslog.log:/logs/syslog.log:ro # 系统日志
       # - ../nginx-proxy-manager/data/logs:/logs/nginx-proxy-manager:ro # nginx proxy manager 日志位置
+
+volumes:
+  crowdsec-db:
+  crowdsec-config:

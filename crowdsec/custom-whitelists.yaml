@@ -1,0 +1,9 @@
+name: custom/whitelists
+description: "Whitelist events from my ip addresses"
+whitelist:
+  reason: "my ipv4/ipv6 ip/ranges"
+  ip:
+  cidr:
+  # tailscale
+    - "100.64.0.0/10"
+    - "fd7a:115c:a1e0::/48"
