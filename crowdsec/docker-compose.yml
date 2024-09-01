@@ -1,0 +1,25 @@
+services:
+  crowdsec:
+    image: crowdsecurity/crowdsec
+    container_name: crowdsec
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+    ports:
+      - 6060:6060 # prometheus 端口
+      - 8080:8080 # local api 端口
+    environment:
+      TZ: Asia/Shanghai
+      GID: "${GID-1000}"
+      # https://app.crowdsec.net/hub/collections 想订阅的合集
+      COLLECTIONS: "crowdsecurity/linux crowdsecurity/nginx-proxy-manager"
+      ENROLL_KEY: aaaaaaaaaaaaaaaa # 修改为你的 key
+      ENROLL_INSTANCE_NAME: crowdsec # 实例名称
+    volumes:
+      - ./data:/var/lib/crowdsec/data/ # 数据存放目录
+      - ./config:/etc/crowdsec/ # 配置存放目录
+      - /var/log/auth.log:/logs/auth.log:ro
+      - /var/log/syslog.log:/logs/syslog.log:ro
+      # - ../nginx-proxy-manager/data/logs:/logs/nginx-proxy-manager:ro # nginx proxy manager 日志位置
