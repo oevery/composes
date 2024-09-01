@@ -1,0 +1,11 @@
+filenames:
+ - /logs/auth.log
+ - /logs/syslog
+labels:
+  type: syslog
+
+---
+filenames:
+  - /logs/nginx-proxy-manager/*.log
+labels:
+  type: nginx-proxy-manager
